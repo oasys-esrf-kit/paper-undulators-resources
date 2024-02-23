@@ -56,10 +56,11 @@ print("Area fit: ", y1.sum() * (x[1] - x[0]))
 # plot and save file
 
 p = plot(x, y, x, y1,
-         xtitle=r'$2 \pi r \sqrt{ 2 \lambda L }$', ytitle=r'Normalized intensity')
+         xtitle=r'$2 \pi r \sqrt{ 2 \lambda L }$', ytitle=r'Normalized intensity', show=0)
 
 import matplotlib.pylab as plt
 plt.savefig('undulator_size.eps')
+plt.show()
 
 
 

@@ -42,10 +42,11 @@ print("Area fit: ", y1.sum() * (x[1] - x[0]))
 # plot and save file
 from srxraylib.plot.gol import plot
 p = plot(x, y, x, y1,
-         xtitle=r'$\theta_r=\theta\sqrt{L/\lambda}$', ytitle=r'$(sin(\Gamma)/\Gamma)^2$')
+         xtitle=r'$\theta_r=\theta\sqrt{L/\lambda}$', ytitle=r'$(sin(\Gamma)/\Gamma)^2$', show=0)
 
 import matplotlib.pylab as plt
 plt.savefig('undulator_divergence.eps')
+plt.show()
 
 
 
