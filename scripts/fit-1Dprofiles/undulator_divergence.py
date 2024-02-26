@@ -12,6 +12,7 @@ y = (numpy.sin(Gamma) / Gamma)**2
 
 # Fitting
 p = [y.max(), 0, 2]
+
 fit = FitManager()
 fit.setdata(x=x, y=y)
 fit.loadtheories(fittheories)
