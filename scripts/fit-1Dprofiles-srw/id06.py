@@ -97,16 +97,16 @@ magnetic_field_container = SRWLMagFldC(_arMagFld=[magnetic_structure],
 mesh = SRWLRadMesh(_eStart=10000.001989244456,
                    _eFin  =10000.001989244456,
                    _ne    =1,
-                   _xStart=-0.00295,
-                   _xFin  =0.00295,
-                   _nx    =201,
-                   _yStart=-0.00295,
-                   _yFin  =0.00295,
-                   _ny    =201,
+                   _xStart=-0.0015,
+                   _xFin  =0.0015,
+                   _nx    =251,
+                   _yStart=-0.0015,
+                   _yFin  =0.0015,
+                   _ny    =251,
                    _zStart=100.0)
 
 stk = SRWLStokes()
-stk.allocate(1,201,201)
+stk.allocate(1,251,251)
 stk.mesh = mesh
 
 wfr = SRWLWfr()
@@ -141,7 +141,7 @@ srw_oe_array = []
 srw_pp_array = []
 
 drift_before_oe_0 = SRWLOptD(-100.0)
-pp_drift_before_oe_0 = [0,0,1.0,1,0,0.15,10.0,0.15,10.0,0,0.0,0.0]
+pp_drift_before_oe_0 = [0,0,1.0,1,0,0.3,5.0,0.3,5.0,0,0.0,0.0]
 
 srw_oe_array.append(drift_before_oe_0)
 srw_pp_array.append(pp_drift_before_oe_0)
@@ -167,6 +167,7 @@ plotMesh1x = [1000*mesh1.xStart, 1000*mesh1.xFin, mesh1.nx]
 plotMesh1y = [1000*mesh1.yStart, 1000*mesh1.yFin, mesh1.ny]
 uti_plot2d1d(arI1, plotMesh1x, plotMesh1y, labels=['Horizontal Position [mm]', 'Vertical Position [mm]', 'Intensity After Propagation'])
 uti_plot_show()
+
 
 plot_and_write_files(wfr, root="id06_backpropagated")
 
