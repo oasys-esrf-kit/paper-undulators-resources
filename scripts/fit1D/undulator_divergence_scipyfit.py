@@ -8,10 +8,10 @@ import matplotlib.pylab as plt
 def gauss(x, height, center, sigma):
     return height * numpy.exp(-(x - center)**2 / (2 * sigma**2))
 
-def doublegauss(x, height, center, sigma, distance, correction):
+def doublegauss(x, height, center, sigma, distance): #, correction):
     out = numpy.exp(-(x - center - distance / 2)**2 / (2 * sigma**2)) + \
-          numpy.exp(-(x - center + distance / 2)**2 / (2 * sigma**2)) + \
-          correction * numpy.exp(-(x - center) ** 2 / (2 * sigma**2))
+          numpy.exp(-(x - center + distance / 2)**2 / (2 * sigma**2)) #+ \
+          # correction * numpy.exp(-(x - center) ** 2 / (2 * sigma**2))
     # icen = numpy.argwhere(numpy.abs(x) <= 0.5 * distance)
     # out[icen] = out[out.argmax()]
     return out * height
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         y1 = gauss(x, *popt)
         print("FWHM = ", 2.355 * popt[2])
     elif ngaussians == 2:
-        p0 = [1.0, 0, 0.5, 0.2, 0.0]
+        p0 = [1.0, 0, 0.5, 0.2] #, 0.0]
         popt, pcov = curve_fit(doublegauss, x, y, p0=p0, method='trf') # ‘lm’, ‘trf’, ‘dogbox’
         y1 = doublegauss(x, *popt)
         print("FWHM = ", 2.355 * popt[2] + popt[3])

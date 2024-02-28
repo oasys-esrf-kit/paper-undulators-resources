@@ -3,10 +3,10 @@ import numpy
 #
 # far field
 #
-a1d = numpy.loadtxt("fit-1Dprofiles-pysruWofry1D/id06_farfield_y.dat")
-a2d = numpy.loadtxt("fit-1Dprofiles-pysruWofry2D/id06_farfield_y.dat")
-aSrw =         numpy.loadtxt("fit-1Dprofiles-srw/id06_farfield_y.dat")
-aTheory =          numpy.loadtxt("fit-1Dprofiles/id06_farfield.dat")
+a1d = numpy.loadtxt("fit1Dwofry1D/id06_farfield_y.dat")
+a2d = numpy.loadtxt("fit1Dwofry2D/id06_farfield_y.dat")
+aSrw =         numpy.loadtxt(    "fit1Dsrw/id06_farfield_y.dat")
+aTheory =          numpy.loadtxt("fit1D/id06_farfield.dat")
 
 import scipy.constants as codata
 u_nperiods = 111.111
@@ -30,10 +30,12 @@ plot(a1d[:, 0], a1d[:, 1] / a1d[:, 1].max(),
 #
 # backpropagatopm
 #
-a1d = numpy.loadtxt("fit-1Dprofiles-pysruWofry1D/id06_backpropagated_y.dat")
-a2d = numpy.loadtxt("fit-1Dprofiles-pysruWofry2D/id06_backpropagated_y.dat")
-aSrw = numpy.loadtxt("fit-1Dprofiles-srw/id06_backpropagated_y.dat")
-aTheory = numpy.loadtxt("fit-1Dprofiles/id06_backpropagated.dat")
+a1d = numpy.loadtxt("fit1Dwofry1D/id06_backpropagated_y.dat")
+a2d = numpy.loadtxt("fit1Dwofry2D/id06_backpropagated_y.dat")
+aSrw = numpy.loadtxt("fit1Dsrw/id06_backpropagated_y.dat")
+aSpectra = numpy.loadtxt("spectra_windows/spectra_results/id06_backpropagated_spectra_1D_hor_zero_emitt_zero_spread.txt")
+
+aTheory = numpy.loadtxt("fit1D/id06_backpropagated.dat")
 
 import scipy.constants as codata
 u_nperiods = 111.111
@@ -47,7 +49,8 @@ from srxraylib.plot.gol import plot
 plot(1e6 * a1d[:, 0], a1d[:, 1] / a1d[:, 1].max(),
      1e6 * a2d[:, 0], a2d[:, 1] / a2d[:, 1].max(),
      1e6 * aSrw[:, 0], aSrw[:, 1] / aSrw[:, 1].max(),
+     1e3 * aSpectra[:, 0], aSpectra[:, 1] / aSpectra[:, 1].max(),
      1e6 * aTheory[:, 0], aTheory[:, 1] / aTheory[:, 1].max(),
      1e6 * aTheory[:, 0], numpy.exp(- aTheory[:, 0]**2 / (2 * sigma**2)),
-     legend=['1d', '2d-v', 'srw-v', 'theory (4 pi)', 'Gaussian'], title='backpropagation',
+     legend=['1d', '2d-v', 'srw-v','spectra v', 'theory (4 pi)', 'Gaussian'], title='backpropagation',
      xtitle="Size @ 0 m [um]", ytitle="Normalized intensity")
