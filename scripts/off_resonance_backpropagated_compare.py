@@ -68,13 +68,14 @@ if __name__ == "__main__":
     #
 
     if True:
+        datadir = "/scisoft/data/srio/paper-undulator/spectra_results/"
         if case == 1:
             Shift = numpy.arange(-400, 100, 1) # case 1
-            filename = "/tmp_14_days/reyesher/to_Manolo/spectra_results/Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case1.hdf5"
-            filename = "/tmp_14_days/reyesher/to_Manolo/spectra_results/Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case1.hdf5"
+            filename = datadir + "Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case1.hdf5"
+            filename = datadir + "Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case1.hdf5"
         elif case == 2:
             Shift = numpy.arange(-1000, 1000, 2) # case 2
-            filename = "/tmp_14_days/reyesher/to_Manolo/spectra_results/Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case2.hdf5"
+            filename = datadir + "Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case2.hdf5"
 
         import h5py
 

@@ -420,10 +420,10 @@ if __name__=='__main__':
     pass
     #examples of using it
     
-    #h_df = get_sigmas_from_spectra_wigner('spectra_results/Spectra_charac_at_source_point_ESRF_ID06_EBS_CPMU18_1_full.hdf5', source_dim='hor_dim', plot_fit=True)
-    #v_df = get_sigmas_from_spectra_wigner('spectra_results/Spectra_charac_at_source_point_ESRF_ID06_EBS_CPMU18_1_full.hdf5', source_dim='ver_dim', plot_fit=True)
-    #run_cal_shadow('ESRF_ID06_EBS_CPMU18_1.json', source_dim='hor_div', save_file=True, emittance=True)
-    #run_cal_shadow('ESRF_ID06_EBS_CPMU18_1.json', source_dim='ver_div', save_file=True, emittance=True)
+    # h_df = get_sigmas_from_spectra_wigner('spectra_results/Spectra_charac_at_source_point_ESRF_ID06_EBS_CPMU18_1_full.hdf5', source_dim='hor_dim', plot_fit=True)
+    # v_df = get_sigmas_from_spectra_wigner('spectra_results/Spectra_charac_at_source_point_ESRF_ID06_EBS_CPMU18_1_full.hdf5', source_dim='ver_dim', plot_fit=True)
+    # run_cal_shadow('ESRF_ID06_EBS_CPMU18_1.json', source_dim='hor_div', save_file=True, emittance=True)
+    # run_cal_shadow('ESRF_ID06_EBS_CPMU18_1.json', source_dim='ver_div', save_file=True, emittance=True)
 
     #run_cal_tanaka('ESRF_ID06_EBS_CPMU18_1.json', 0.0, source_dim='hor_size', save_file=True, emittance=True)
     #run_cal_tanaka('ESRF_ID06_EBS_CPMU18_1.json', 0.0, source_dim='ver_size', save_file=True, emittance=True)

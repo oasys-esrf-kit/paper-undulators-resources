@@ -21,9 +21,9 @@ from srxraylib.plot.gol import plot, plot_image
 plot_from_oe = 1000 # set to a large number to avoid plots
 
 
-def run_beamline(shift=0.0, harmonic_number=1):
+def run_beamline(shift=0.0, electron_energy=6.0, harmonic_number=1, do_write=0):
 
-    photon_energy = 10000.0 * harmonic_number + shift
+    photon_energy = 10000.0 + shift
     ##########  SOURCE ##########
 
 
@@ -33,15 +33,15 @@ def run_beamline(shift=0.0, harmonic_number=1):
     #
     from wofryimpl.propagator.light_source_pysru import WOPySRULightSource
     light_source = WOPySRULightSource.initialize_from_keywords(
-        energy_in_GeV=6,
+        energy_in_GeV=electron_energy,
         current=0.2,
         K_vertical=1.34109,
         period_length=0.018,
         number_of_periods=111.111,
         distance=100,
-        gapH=0.005,
-        gapV=0.005,
-        photon_energy=photon_energy,
+        gapH=0.005 * 2,
+        gapV=0.005 * 2,
+        photon_energy=photon_energy * harmonic_number,
         h_slit_points=3,
         v_slit_points=250,
         number_of_trajectory_points=1666,
@@ -54,21 +54,24 @@ def run_beamline(shift=0.0, harmonic_number=1):
 
     if plot_from_oe <= 0: plot(output_wavefront.get_abscissas(),output_wavefront.get_intensity(),title='SOURCE')
 
-    if shift < 0:
-        subgroupname = "wfr_%04d" % shift
-    else:
-        subgroupname = "wfr_%03d" % shift
-    output_wavefront.save_h5_file("wfr1D_farfield_n%d_run1.h5" % harmonic_number, subgroupname=subgroupname,
-                                  intensity=True, phase=False, overwrite=False, verbose=True)
+    if do_write:
+        if shift == 0.0:
+            filename = "wfr1D_elec_energy_scan_farfield_n%d.h5" % harmonic_number
+        else:
+            filename = "wfr1D_elec_energy_scan_farfield_n%d_shift%d.h5" % (harmonic_number, shift)
+
+        subgroupname = "wfr_%5.3f" % electron_energy
+        output_wavefront.save_h5_file(filename=filename, subgroupname=subgroupname,
+                                      intensity=True, phase=False, overwrite=False, verbose=True)
 
 
 
 
 if __name__ == "__main__":
-    # delete  wfr1D_farfield.h5
-    Shift = numpy.arange(-400, 100, 1)  # RUN1
-    # Shift = numpy.arange(-1000, 1000, 2) # # RUN2
-    print(Shift)
-    for shift in Shift:
-        print(">>>> shift: ", shift)
-        run_beamline(shift=shift, harmonic_number=3)
+    # delete  wfr1D_elec_energy_scan_farfield.h5
+    plot_from_oe = 1000  # set to a large number to avoid plots
+    Electron_energy = numpy.linspace(5.9, 6.1, 201)
+    print(Electron_energy)
+    for electron_energy in Electron_energy:
+        print(">>>> electron_energy: **%5.3f**" % electron_energy)
+        run_beamline(shift=50, electron_energy=electron_energy, harmonic_number=1, do_write=1)

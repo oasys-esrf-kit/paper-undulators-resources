@@ -25,9 +25,20 @@ def get_fwhm(histogram, bins, ret0=None):
 
     return fwhm, quote, coordinates
 
+def get_stdev(x, y):
+    delta = (x[1] - x[0])
+    Y = y.copy()
+    Y /= y.sum() * delta
+    m1 = (x ** 1 * Y).sum() * delta
+    m2 = (x ** 2 * Y).sum() * delta
+    return numpy.sqrt(m2 - m1**2)
+
 if __name__ == "__main__":
 
-    case = 1
+    from srxraylib.plot.gol import plot, plot_image, plot_show
+
+    case = 2
+    harmonic_number = 1
 
 
     #
@@ -37,12 +48,13 @@ if __name__ == "__main__":
     if True:
         if case == 1:
             Shift = numpy.arange(-400, 100, 1) # case 1
-            filename = "fit1Dwofry1D/wfr1D_farfield_run1.h5"
+            filename = "fit1Dwofry1D/wfr1D_farfield_n%d_run1.h5" % harmonic_number
         elif case == 2:
             Shift = numpy.arange(-1000, 1000, 2) # case 2
-            filename = "fit1Dwofry1D/wfr1D_farfield_run2.h5"
+            filename = "fit1Dwofry1D/wfr1D_farfield_n%d_run2.h5" % harmonic_number
 
         Y = numpy.zeros_like(Shift, dtype=float)
+        SD = numpy.zeros_like(Shift, dtype=float)
         for i, shift in enumerate(Shift):
 
             if shift < 0:
@@ -58,45 +70,99 @@ if __name__ == "__main__":
             # plot(x, y, title="shift = %d eV FWHM = %f" % (shift, fwhm))
 
             Y[i] = fwhm
+            SD[i] = get_stdev(x, y)
+            if i == 0:
+                YW_IMG = numpy.zeros((Shift.size, y.size))
+            YW_IMG[i, :] = y
 
-        plot(Shift, Y, xtitle="Shift [eV]", ytitle='FWHM [eV]', show=0)
+        plot_image(YW_IMG, Shift, x * 1e3,
+                   yrange=[-2, 2],
+                   xtitle=r"Photon energy $E-E_0$ [eV]", ytitle="x [mm] @ far field (100m)", title="", aspect='auto', show=0)
+
+        # plot(Shift, Y,
+        #      Shift, SD*2.355,
+        #      xtitle="Shift [eV]", ytitle='WOFRY FWHM % 100m [m]', legend=['FWHM','SD*2.355'], show=0)
+
         Delta = 1 * 111.111 * (Shift) / 10000.0
-        plot(Delta, Y, xtitle="Delta", ytitle='FWHM [eV]')
+
+        # plot(Delta, Y,
+        #      Delta, SD*2.355,
+        #      xtitle="Delta", ytitle='WOFRY FWHM % 100m [m]', legend=['FWHM','SD*2.355'], show=0)
+
+        ShiftW = Shift.copy()
+        DeltaW = Delta.copy()
+        YW = Y.copy()
+        SDW = SD.copy()
 
     #
     # spectra results
     #
 
-    if False:
+    if True and harmonic_number < 2:
+
+        datadir = "/scisoft/data/srio/paper-undulator/spectra_results/"
         if case == 1:
             Shift = numpy.arange(-400, 100, 1) # case 1
-            filename = "/tmp_14_days/reyesher/to_Manolo/spectra_results/Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case1.hdf5"
-            filename = "/tmp_14_days/reyesher/to_Manolo/spectra_results/Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case1.hdf5"
+            filename = datadir + "Spectra_Divergence_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case1.hdf5"
         elif case == 2:
             Shift = numpy.arange(-1000, 1000, 2) # case 2
-            filename = "/tmp_14_days/reyesher/to_Manolo/spectra_results/Spectra_charac_at_source_point_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case2.hdf5"
+            filename = datadir + "Spectra_Divergence_Off_Res_ESRF_ID06_EBS_CPMU18_1_0_emitt_0_spread_case2.hdf5"
 
         import h5py
 
         file = h5py.File(filename, 'r')
         shift =     file['/Scan/harmonic 01/shift'][()]
         flux_dens = file["/Scan/harmonic 01/flux_dens"][()]
-        x =         file["/Scan/harmonic 01/x"][()]
-        y =         file["/Scan/harmonic 01/y"][()]
+        x_div =         file["/Scan/harmonic 01/x_div"][()]
+        y_div =         file["/Scan/harmonic 01/y_div"][()]
 
-        print(shift.shape, flux_dens.shape, x.shape, y.shape)
+        print(shift.shape, flux_dens.shape, x_div.shape, y_div.shape)
 
         nx = flux_dens.shape[1]
 
-        plot(y, flux_dens[0, nx // 2, :])
+        # plot(y_div, flux_dens[0, nx // 2, :], xtitle="Angle in mrad")
 
         YS = numpy.zeros_like(Shift, dtype=float)
+        SD = numpy.zeros_like(Shift, dtype=float)
         for i, shift in enumerate(Shift):
             ys = flux_dens[i, nx // 2, :]
-            fwhm, _, _ = get_fwhm(ys, y)
-            plot(x, y, title="shift = %d eV FWHM = %f" % (shift, fwhm))
-            YS[i] = fwhm
+            fwhm, _, _ = get_fwhm(ys, y_div)
+            # plot(x_div, ys, title="shift = %d eV FWHM = %f" % (shift, fwhm), xtitle="Angle in mrad")
+            YS[i] = fwhm * 1e-3 * 100 # in m @ 100m
+            SD[i] = get_stdev(y_div * 1e-3 * 100, ys)
+            if i == 0:
+                Y_IMG = numpy.zeros((Shift.size, y_div.size))
+            Y_IMG[i, :] = ys
 
-        plot(Shift, YS, xtitle="Shift [eV]", ytitle='SPECTRA FWHM [eV]', show=0)
+        plot_image(Y_IMG, Shift, y_div * 1e-3 * 100,
+                   yrange=[-0.002, 0.002],
+                   xtitle="Shift [eV]", ytitle="Far field x[mm]", title="SPECTRA", aspect='auto', show=0)
+
+        # plot(Shift, YS,
+        #      Shift, SD * 2.355,
+        #      xtitle="Shift [eV]", ytitle='SPECTRA FWHM % 100m [m]', legend=['FWHM','SD*2.355'], show=0)
+
         Delta = 1 * 111.111 * (Shift) / 10000.0
-        plot(Delta, YS, xtitle="Delta", ytitle='SPECTRA FWHM [eV]')
+
+        # plot(Delta, YS,
+        #      Delta, SD * 2.355,
+        #      xtitle="Delta", ytitle='SPECTRA FWHM % 100m [m]', legend=['FWHM','SD*2.355'], show=0)
+
+        plot(Delta, YS,
+             DeltaW, YW,
+             Delta,  SD,
+             DeltaW, SDW,
+             xtitle="Delta=N n DE/Eo", ytitle="width at far field (100 m) [m]",
+             legend=['FWHM (SPECTRA)','FWHM (WOFRY)','SD*2.355 (SPECTRA)','SD*2.355 (WOFRY)'],
+             xrange=[-2,5], yrange=[0,0.005], show=0)
+
+        plot(Shift , YS,
+             ShiftW, YW,
+             Shift ,  SD,
+             ShiftW, SDW,
+             xtitle="DE [eV]", ytitle="width at far field (100 m) [m]",
+             legend=['FWHM (SPECTRA)','FWHM (WOFRY)','SD*2.355 (SPECTRA)','SD*2.355 (WOFRY)'],
+             xrange=[-300,500], yrange=[0,0.005], show=0)
+
+
+    plot_show()

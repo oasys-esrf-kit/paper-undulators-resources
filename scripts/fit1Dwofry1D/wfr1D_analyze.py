@@ -27,7 +27,7 @@ def get_fwhm(histogram, bins, ret0=None):
 
 if __name__ == "__main__":
     # delete  wfr1D_farfield.h5
-    # Shift = numpy.arange(-400, 100, 1)
+    # Shift = numpy.arange(-400, 100, 1)  # RUN1
     # Shift = numpy.arange(-60, 60, 5)
     Shift = numpy.arange(-1000, 1000, 2)
     print(Shift)
