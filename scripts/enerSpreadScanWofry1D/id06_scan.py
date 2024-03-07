@@ -71,7 +71,10 @@ if __name__ == "__main__":
     # delete  wfr1D_elec_energy_scan_farfield.h5
     plot_from_oe = 1000  # set to a large number to avoid plots
     Electron_energy = numpy.linspace(5.9, 6.1, 201)
-    print(Electron_energy)
-    for electron_energy in Electron_energy:
-        print(">>>> electron_energy: **%5.3f**" % electron_energy)
-        run_beamline(shift=50, electron_energy=electron_energy, harmonic_number=1, do_write=1)
+    Shift = numpy.arange(-300, 501, 1)
+    #print(Electron_energy)
+    #print(Shift)
+    for shift in Shift:
+        for electron_energy in Electron_energy:
+            print(">>>> shift: %f electron_energy: **%5.3f**" % (shift, electron_energy))
+            run_beamline(shift=shift, electron_energy=electron_energy, harmonic_number=1, do_write=1)
