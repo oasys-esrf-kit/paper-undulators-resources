@@ -1,0 +1,56 @@
+{
+  "Accelerator": {
+    "Energy (GeV)": 6,
+    "Current (mA)": 200,
+    "&sigma;<sub>z</sub> (mm)": 4.28,
+    "Nat. Emittance (m.rad)": 1.366e-10,
+    "Coupling Constant": 0.038,
+    "Energy Spread": 0.001,
+    "&beta;<sub>x,y</sub> (m)": [6.909832631672928,2.644700286549622],
+    "&alpha;<sub>x,y</sub>": [0,0],
+    "&eta;<sub>x,y</sub> (m)": [1.31848303356e-10,4.9999910218e-12],
+    "&eta;'<sub>x,y</sub>": [0,0],
+    "Type": "Storage Ring",
+    "Options": {
+      "Bunch Profile": "Gaussian",
+      "Injection Condition": "Automatic",
+      "Zero Emittance": false,
+      "Zero Energy Spread": false
+    }
+  },
+  "Light Source": {
+    "&lambda;<sub>u</sub> (mm)": 18,
+    "Device Length (m)": 2,
+    "K value": 1.3410950749294401,
+    "Type": "Linear Undulator",
+    "Options": {
+      "Field Structure": "Antisymmetric",
+      "End Correction Magnet": true,
+      "Natural Focusing": "None",
+      "Field Offset & Taper": false,
+      "Add Phase Error": false,
+      "Segmentation": "None"
+    }
+  },
+  "Configurations": {
+    "Distance from the Source (m)": 100,
+    "Target Energy (eV)": 10000,
+    "x Range (mm)": [-4,4],
+    "Points (x)": 10,
+    "y Range (mm)": [-4,4],
+    "Points (y)": 10,
+    "Type": "Near Field::Spatial Dependence::Spatial Flux Density::Mesh: x-y",
+    "Options": {
+      "Define Obs. Point in": "Position",
+      "Normalize Photon Energy": false,
+      "Accuracy": "Default"
+    }
+  },
+  "Output File": {
+    "Format": "JSON",
+    "Folder": "C:\\Work_JR\\spectra_win",
+    "Prefix": "spatial_profile",
+    "Serial Number": 26,
+    "Comment": ""
+  }
+}
