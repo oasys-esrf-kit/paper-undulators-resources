@@ -180,7 +180,7 @@ if __name__ == "__main__":
                                                      "n=7 FWHM", "n=7 SD", "n=7 Qa",
                                                      ], title="", show=1)
 
-    Spread1,   Fwhm1, Sd1, Qa1 = wofry_results(harmonic_number=1, do_plot=0)
+    Spread1,   Fwhm1, Sd1, Qa1 = wofry_results(harmonic_number=1, do_plot=1)
     Spread1s,  Fwhm1s, Sd1s, Qa1s = wofry_results(harmonic_number=1, shift=-25, do_plot=0)
     Spread1s2, Fwhm1s2, Sd1s2, Qa1s2 = wofry_results(harmonic_number=1, shift=25, do_plot=0)
     Spread1s3, Fwhm1s3, Sd1s3, Qa1s3 = wofry_results(harmonic_number=1, shift=-50, do_plot=0)
