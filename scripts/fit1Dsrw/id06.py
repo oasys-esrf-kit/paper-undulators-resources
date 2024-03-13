@@ -80,7 +80,7 @@ part_beam.arStatMom2[2]      = 0.0
 part_beam.arStatMom2[3]      = 0.0
 part_beam.arStatMom2[4]      = 0.0
 part_beam.arStatMom2[5]      = 0.0
-part_beam.arStatMom2[10]     = 1.0000000000000001e-16
+part_beam.arStatMom2[10]     = 0.0
 
 magnetic_fields = []
 magnetic_fields.append(SRWLMagFldH(1, 'v',
@@ -97,16 +97,16 @@ magnetic_field_container = SRWLMagFldC(_arMagFld=[magnetic_structure],
 mesh = SRWLRadMesh(_eStart=10000.001989244456,
                    _eFin  =10000.001989244456,
                    _ne    =1,
-                   _xStart=-0.0015,
-                   _xFin  =0.0015,
-                   _nx    =251,
-                   _yStart=-0.0015,
-                   _yFin  =0.0015,
-                   _ny    =251,
+                   _xStart=-0.0025,
+                   _xFin  =0.0025,
+                   _nx    =351,
+                   _yStart=-0.0025,
+                   _yFin  =0.0025,
+                   _ny    =351,
                    _zStart=100.0)
 
 stk = SRWLStokes()
-stk.allocate(1,251,251)
+stk.allocate(1,351,351)
 stk.mesh = mesh
 
 wfr = SRWLWfr()

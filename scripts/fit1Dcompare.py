@@ -63,7 +63,7 @@ sigma = 2.704 / 4 / numpy.pi * numpy.sqrt(u_period * u_nperiods * wavelength)
 from srxraylib.plot.gol import plot
 cte = numpy.sqrt(wavelength * u_nperiods * u_period)
 
-if False:
+if True:
      plot(1e6 * a1d[:, 0], a1d[:, 1] / a1d[:, 1].max(),
           1e6 * a2d[:, 0], a2d[:, 1] / a2d[:, 1].max(),
           1e6 * aSrw[:, 0], aSrw[:, 1] / aSrw[:, 1].max(),
@@ -84,6 +84,13 @@ if False:
           marker=[None, None, '+'], linestyle=[None,None,''],
           xtitle="Size @ 0 m [um]", ytitle="Normalized intensity", xrange=[-20,20], show=1)
 
+if False: # for Chubar
+     plot(
+          1e6 * aSrw[:, 0], aSrw[:, 1] / aSrw[:, 1].max(),
+          1e3 * aSpectra[:, 0], aSpectra[:, 1] / aSpectra[:, 1].max(),
+          1e6 * aTheory[:, 0], numpy.exp(- aTheory[:, 0]**2 / (2 * sigma**2)),
+          legend=['srw-v','spectra v', 'Gaussian'], title='backpropagation',
+          xtitle="Size @ 0 m [um]", ytitle="Normalized intensity", xrange=[-20,20], show=1)
 
 #
 # plot(
@@ -93,22 +100,23 @@ if False:
 #      # marker=[None, None, '+'], linestyle=[None,None,''],xrange=[-20,20],
 #      xtitle="Size @ 0 m [um]", ytitle="Normalized intensity", show=1)
 
-x = aTheory2[:, 0]
-y = aTheory2[:, 1]
-y = y / numpy.trapz(y, x)
+if False:
+     x = aTheory2[:, 0]
+     y = aTheory2[:, 1]
+     y = y / numpy.trapz(y, x)
 
-plot(x, y)
+     plot(x, y)
 
-# ss = numpy.sqrt( (y * x**2).sum() * (x[1] - x[0]))
-# ss = numpy.sqrt( numpy.trapz(x**2 * y, x)) # RMS numeric 0.262849885337894 BAD
-ss = 0.409924 / 2  # Mathematica divided by 2.. Why?? NOT BAD
-ss = 0.218042 #Elleume # NOT BAD
-ss, _, _ = fitgauss(x, y)  # fit 0.21034769697537756 NOT BAD
-print("stdev", ss)
+     # ss = numpy.sqrt( (y * x**2).sum() * (x[1] - x[0]))
+     # ss = numpy.sqrt( numpy.trapz(x**2 * y, x)) # RMS numeric 0.262849885337894 BAD
+     ss = 0.409924 / 2  # Mathematica divided by 2.. Why?? NOT BAD
+     ss = 0.218042 #Elleume # NOT BAD
+     ss, _, _ = fitgauss(x, y)  # fit 0.21034769697537756 NOT BAD
+     print("stdev", ss)
 
-plot(x, y / y.max(),
-     x, numpy.exp(- x**2 / (2 * ss**2)))
+     plot(x, y / y.max(),
+          x, numpy.exp(- x**2 / (2 * ss**2)))
 
 
-# cte = numpy.sqrt(wavelength * u_nperiods * u_period)
-# plot(1e6 * cte * aTheory2[:, 0], aTheory[:, 1] / aTheory[:, 1].max(),)
+     # cte = numpy.sqrt(wavelength * u_nperiods * u_period)
+     # plot(1e6 * cte * aTheory2[:, 0], aTheory[:, 1] / aTheory[:, 1].max(),)

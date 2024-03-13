@@ -94,11 +94,40 @@ if __name__ == "__main__":
         YW = Y.copy()
         SDW = SD.copy()
 
+        #
+        #  check resonance shift-> e energy shift
+        #
+        if False:
+            import scipy.constants as codata
+
+            e = 10000.0 + Shift
+            w1 = codata.c * codata.h / codata.e / e
+            K = 1.341095
+            lambda_u = 0.018
+            gamma1 = numpy.sqrt((1 + K ** 2 / 2) * (lambda_u / 2 / w1))  # DG + gamma0
+            Ee1 = gamma1 * 0.51099895e-3
+            plot(gamma1, Ee1, show=0)
+
+
+            plot_image(YW_IMG, Ee1, x * 1e3,
+                       yrange=[-2, 2],
+                       xtitle=r"CONVERTED e energy [GeV]", ytitle="x [mm] @ far field (100m)", title="", aspect='auto', show=0)
+
+            YW_IMGi = YW_IMG.copy()
+            Eei = numpy.linspace(Ee1.min(), Ee1.max(), Ee1.size)
+            for i in range(YW_IMG.shape[1]):
+                tmp = numpy.interp(Eei, Ee1, YW_IMG[:, i])
+                YW_IMGi[:, i] = tmp
+
+            plot_image(YW_IMGi, Eei, x * 1e3,
+                       yrange=[-2, 2],
+                       xtitle=r"INTERPOLATED e energy [GeV]", ytitle="x [mm] @ far field (100m)", title="", aspect='auto', show=0)
+
     #
     # spectra results
     #
 
-    if True and harmonic_number < 2:
+    if True: # and harmonic_number < 2:
 
         datadir = "/scisoft/data/srio/paper-undulator/spectra_results/"
         if case == 1:

@@ -47,10 +47,10 @@ if __name__ == "__main__":
     epsilon = numpy.linspace(0, 5, nepsilon)
     print(Fflux.shape, Fdiv.shape, Fsize.shape, nDelta, nepsilon )
 
-    if False:
-        plot_image(Fflux, Delta, epsilon, xtitle=r'$\Delta$', ytitle=r'$\varepsilon$', title="Fflux", aspect='auto', show=0)
-        plot_image(Fsize, Delta, epsilon, xtitle=r'$\Delta$', ytitle=r'$\varepsilon$', title="Fsize", aspect='auto', show=0)
-        plot_image(Fdiv, Delta, epsilon, xtitle=r'$\Delta$', ytitle=r'$\varepsilon$', title="Fdiv", aspect='auto', show=0)
+
+    if False: plot_image(Fflux, Delta, epsilon, xtitle=r'$\Delta$', ytitle=r'$\varepsilon$', title="Fflux", aspect='auto', show=0)
+    if False: plot_image(Fsize, Delta, epsilon, xtitle=r'$\Delta$', ytitle=r'$\varepsilon$', title="Fsize", aspect='auto', show=0)
+    if False: plot_image(Fdiv, Delta, epsilon, xtitle=r'$\Delta$', ytitle=r'$\varepsilon$', title="Fdiv", aspect='auto', show=0)
 
     # scan vs epsilon
     if True:
@@ -67,22 +67,104 @@ if __name__ == "__main__":
             Qa[i] = q_a(2 * numpy.pi * eps)
             Qs[i] = q_s(2 * numpy.pi * eps)
 
-        Fs = Fsize[nDelta // 2, :]
-        Fa = Fdiv[ nDelta // 2, :]
-        plot(epsilon, Fs / Gs0,
-             epsilon, Fa / Ga0,
-             epsilon, Qs,
-             epsilon, Qa,
-             epsilon, Fs / Gs0 * Fa / Ga0,
-             epsilon, Qa * Qs,
-             xtitle="epsilon", title="cut at Delta=%d" % (Delta[nDelta//2]),
-             legend=['Size Sirepo (norm)', 'Div Sirepo (norm)', 'Size Tanaka', 'Div Tanaka', 'prod Sirepo', 'prod Tanaka'], show=0)
+        if True:
+            Fs = Fsize[nDelta // 2, :]
+            plot(epsilon, Fs / Gs0,
+                 epsilon, Qs,
+                 xtitle="epsilon", title="cut at Delta=%d" % (Delta[nDelta//2]),
+                 legend=['Size Sirepo (norm)', 'Size Tanaka', ], show=0)
+
+            Fa = Fdiv[ nDelta // 2, :]
+            plot(
+                epsilon, Fa / Ga0,
+                epsilon, Qa,
+                xtitle="epsilon", title="", # cut at Delta=%d" % (Delta[nDelta // 2, ]),
+                legend=['Div Sirepo (norm) Delta=%d eV' % (Delta[nDelta // 2]),
+                        'Div Tanaka', ], show=0)
+
+
+            N = 111.11
+            n = 1
+            e0 = 10000.0
+            E = Delta * e0 / N / n
+            spread = epsilon / N / n # / 2 / numpy.pi
+            plot(
+                spread, Fa / Ga0,
+                spread, Qa,
+                xtitle="spread", title="", # cut at Delta=%d" % (Delta[nDelta // 2, ]),
+                legend=['Div Sirepo (norm) Delta=%d eV' % (Delta[nDelta // 2]),
+                        'Div Tanaka', ], show=0)
+
+
+        if False:
+            plot(
+                epsilon, Fdiv[0, :]                  , #/ Fdiv[0, 0],
+                epsilon, Fdiv[int(nDelta * 0.25), :] , #/ Fdiv[int(nDelta * 0.25), 0],
+                epsilon, Fdiv[int(nDelta * 0.50), :] , #/ Fdiv[int(nDelta * 0.50), 0],
+                epsilon, Fdiv[int(nDelta * 0.75), :] , #/ Fdiv[int(nDelta * 0.75), 0],
+                epsilon, Fdiv[-1, :]                 , #/ Fdiv[-1, 0],
+                epsilon, Qa,
+                xtitle="epsilon", title="", # cut at Delta=%d" % (Delta[nDelta // 2, ]),
+                legend=['Div Sirepo Delta=%d eV' % (Delta[0]),
+                        'Div Sirepo Delta=%d eV' % (Delta[int(nDelta * 0.25)] ),
+                        'Div Sirepo Delta=%d eV' % (Delta[int(nDelta * 0.50)] ),
+                        'Div Sirepo Delta=%d eV' % (Delta[int(nDelta * 0.75)] ),
+                        'Div Sirepo Delta=%d eV' % (Delta[-1]),
+                        'Div Tanaka', ], show=0)
+
+        FdivN = Fdiv.copy()
+        for i, eps in enumerate(epsilon):
+            FdivN[:, i] = FdivN[:, i] / Fdiv[:, 0]
+
+        FsizeN = Fsize.copy()
+        for i, eps in enumerate(epsilon):
+            FsizeN[:, i] = FsizeN[:, i] / Fsize[:, 0]
+
+        if True:
+            plot_image(FdivN, Delta, epsilon, xtitle=r'$\Delta$', ytitle=r'$\varepsilon$', title="Fdiv NORMALIZED",
+                                aspect='auto', show=0)
+
+            plot_image(FsizeN, Delta, epsilon, xtitle=r'$\Delta$', ytitle=r'$\varepsilon$', title="Fsize NORMALIZED",
+                                aspect='auto', show=0)
+
+            N = 111.11
+            n = 1
+            e0 = 10000.0
+            E = Delta * e0 / N / n
+            spread = epsilon / N / n # / 2 / numpy.pi
+
+            ibad = numpy.argwhere(spread > 0.005)
+            FdivN[:, ibad] = 1
+            FsizeN[:, ibad] = 1
+
+            f, _ = plot_image(FdivN, E, spread, xtitle=r'shift from resonance [eV]', ytitle=r'e energy spread', title="Fdiv NORMALIZED",
+                       aspect='auto', xrange=[-300, 450], yrange=[0, 0.005], add_colorbar=True, show=0)
+
+            plot_image(FsizeN, E, spread, xtitle=r'shift from resonance [eV]', ytitle=r'e energy spread', title="Fsize NORMALIZED",
+                       aspect='auto',  xrange=[-300, 450], yrange=[0, 0.005], show=0)
+
+
+
+
+        if False:
+            plot(
+            epsilon, FdivN[0, :],  # / Fdiv[0, 0],
+            epsilon, FdivN[int(nDelta * 0.25), :],  # / Fdiv[int(nDelta * 0.25), 0],
+            epsilon, FdivN[int(nDelta * 0.50), :],  # / Fdiv[int(nDelta * 0.50), 0],
+            epsilon, FdivN[int(nDelta * 0.75), :],  # / Fdiv[int(nDelta * 0.75), 0],
+            epsilon, FdivN[-1, :],
+            epsilon, Qa,
+            xtitle="epsilon", title="",  # cut at Delta=%d" % (Delta[nDelta // 2, ]),
+            legend=['DivN Sirepo Delta=%d eV' % (Delta[0]),
+                    'DivN Sirepo Delta=%d eV' % (Delta[int(nDelta * 0.25)]),
+                    'DivN Sirepo Delta=%d eV' % (Delta[int(nDelta * 0.50)]),
+                    'DivN Sirepo Delta=%d eV' % (Delta[int(nDelta * 0.75)]),
+                    'DivN Sirepo Delta=%d eV' % (Delta[-1]),
+                    'DivN Tanaka', ], show=0)
 
 
     # scan vs delta
-    if True:
-
-
+    if False:
         Gs0 = Fsize[ nDelta // 2, 0]
         Ga0 = Fdiv [nDelta // 2, 0]
 
