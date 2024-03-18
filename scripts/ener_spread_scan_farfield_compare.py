@@ -281,7 +281,7 @@ if __name__ == "__main__":
                                                      "n=3 FWHM", "n=3 SD", "n=3 Qa",
                                                      "n=5 FWHM", "n=5 SD", "n=5 Qa",
                                                      # "n=7 FWHM", "n=7 SD", "n=7 Qa",
-                                                     ], title="pySRU", yrange=[0,5], show=0)
+                                                     ], title="", yrange=[0,5], show=0)
 
 
     # WOFRY shifted from resonance

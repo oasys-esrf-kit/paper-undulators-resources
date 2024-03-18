@@ -47,6 +47,7 @@ if False:
 a1d = numpy.loadtxt("fit1Dwofry1D/id06_backpropagated_y.dat")
 a2d = numpy.loadtxt("fit1Dwofry2D/id06_backpropagated_y.dat")
 aSrw = numpy.loadtxt("fit1Dsrw/id06_backpropagated_y.dat")
+aHankel = numpy.loadtxt("hankel/id06_backpropagated_y.dat")
 aSpectra = numpy.loadtxt("spectra_windows/spectra_results/id06_backpropagated_spectra_1D_hor_zero_emitt_zero_spread.txt")
 
 aTheory = numpy.loadtxt("fit1D/id06_backpropagated.dat")
@@ -71,7 +72,8 @@ if True:
           1e6 * aTheory[:, 0], aTheory[:, 1] / aTheory[:, 1].max(),
           1e6 * aTheory[:, 0], numpy.exp(- aTheory[:, 0]**2 / (2 * sigma**2)),
           1e6 * cte * aTheory2[:, 0], aTheory2[:, 1] / aTheory2[:, 1].max(),
-          legend=['1d', '2d-v', 'srw-v','spectra v', 'theory (4 pi)', 'Gaussian', 'Theory raw nb'], title='backpropagation',
+          1e6 * aHankel[:, 0], aHankel[:, 1] / aHankel[:, 1].max(),
+          legend=['1d', '2d-v', 'srw-v','spectra v', 'theory (4 pi)', 'Gaussian', 'Theory raw nb', 'Hankel'], title='backpropagation',
           xtitle="Size @ 0 m [um]", ytitle="Normalized intensity", xrange=[-20,20], show=1)
 
      sigma2 = sigma # 0.40994 * cte
@@ -80,8 +82,9 @@ if True:
           1e6 * aTheory[:, 0], aTheory[:, 1] / aTheory[:, 1].max(),
           1e6 * aTheory[:, 0], numpy.exp(- aTheory[:, 0]**2 / (2 * sigma2**2)),
           1e6 * cte * aTheory2[:, 0], aTheory2[:, 1] / aTheory2[:, 1].max(),
-          legend=['theory (4 pi)', 'Gaussian', 'Theory raw nb'], title='backpropagation',
-          marker=[None, None, '+'], linestyle=[None,None,''],
+          1e6 * aHankel[:, 0], aHankel[:, 1] / aHankel[:, 1].max(),
+          legend=['theory (4 pi)', 'Gaussian', 'Theory raw nb', 'Hankel'], title='backpropagation',
+          marker=[None, None, None, '+'], linestyle=[None,None,None,''],
           xtitle="Size @ 0 m [um]", ytitle="Normalized intensity", xrange=[-20,20], show=1)
 
 if False: # for Chubar
