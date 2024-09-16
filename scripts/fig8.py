@@ -53,18 +53,18 @@ if __name__ == "__main__":
     import matplotlib
     matplotlib.rcParams.update({'font.size': 18})
 
-
+    xrange = [-20e-6, 20e-6]
     beam = run_shadow4(energy=10000.0, code_undul_phot='internal')
-    tkt_zero_0 = beam.histo2(3,6, nbins=101, xrange=[-15e-6,15e-6], yrange=[-15e-6,15e-6], ref=23)
-    tkt_zero_0_v = beam.histo1(6, nbins=101, xrange=[-15e-6, 15e-6], ref=23)
+    tkt_zero_0 = beam.histo2(3,6, nbins=101, xrange=xrange, yrange=xrange, ref=23)
+    tkt_zero_0_v = beam.histo1(6, nbins=101, xrange=xrange, ref=23)
 
     beam = run_shadow4(energy=9909.91, code_undul_phot='internal')
-    tkt_red_0 = beam.histo2(3,6, nbins=101, xrange=[-15e-6,15e-6], yrange=[-15e-6,15e-6], ref=23)
-    tkt_red_0_v = beam.histo1(6, nbins=101, xrange=[-15e-6, 15e-6], ref=23)
+    tkt_red_0 = beam.histo2(3,6, nbins=101, xrange=xrange, yrange=xrange, ref=23)
+    tkt_red_0_v = beam.histo1(6, nbins=101, xrange=xrange, ref=23)
 
-    beam = run_shadow4(energy=1036.04, code_undul_phot='internal')
-    tkt_blue_0 = beam.histo2(3,6, nbins=101, xrange=[-15e-6,15e-6], yrange=[-15e-6,15e-6], ref=23)
-    tkt_blue_0_v = beam.histo1(6, nbins=101, xrange=[-15e-6, 15e-6], ref=23)
+    beam = run_shadow4(energy=10036.04, code_undul_phot='internal')
+    tkt_blue_0 = beam.histo2(3,6, nbins=101, xrange=xrange, yrange=xrange, ref=23)
+    tkt_blue_0_v = beam.histo1(6, nbins=101, xrange=xrange, ref=23)
 
     # rays = beam.get_rays()
     # plot_scatter(1e6 * rays[:, 3], 1e6 * rays[:, 5], title='(X,Z) in microns', show=0)
@@ -83,8 +83,8 @@ if __name__ == "__main__":
     plot(1e6 * tkt_zero_0_v["bin_path"], tkt_zero_0_v["histogram_path"],
          1e6 * tkt_red_0_v["bin_path"], tkt_red_0_v["histogram_path"],
          1e6 * tkt_blue_0_v["bin_path"], tkt_blue_0_v["histogram_path"],
-         legend=[],
-         figsize=(10,8), xtitle=r"Z [$\mu$m]", ytitle=r"Intensity [arbitrary units]",)
+         legend=[r"$E_0$",r"$E_0 (1-1/(Nn))$",r"$E_0 (1+0.4/(Nn))$"],
+         figsize=(10,8), xtitle=r"Z [$\mu$m]", ytitle=r"Intensity [arbitrary units]", color=['k','r','b'])
 
     plot_show()
 
