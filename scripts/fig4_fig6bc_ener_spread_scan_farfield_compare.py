@@ -67,9 +67,9 @@ def wofry_results(harmonic_number=1, shift=0.0, do_plot=0):
     #
     Electron_energy = numpy.linspace(5.9, 6.1, 201)
     if shift == 0.0:
-        filename = "enerSpreadScanWofry1D/wfr1D_elec_energy_scan_farfield_n%d.h5" % harmonic_number
+        filename = "enerSpreadScanWofry1D/OLD/wfr1D_elec_energy_scan_farfield_n%d.h5" % harmonic_number
     else:
-        filename = "enerSpreadScanWofry1D/wfr1D_elec_energy_scan_farfield_n%d_shift%d.h5" % (harmonic_number, shift)
+        filename = "enerSpreadScanWofry1D/OLD/wfr1D_elec_energy_scan_farfield_n%d_shift%d.h5" % (harmonic_number, shift)
 
     Y = numpy.zeros_like(Electron_energy, dtype=float)
     SD = numpy.zeros_like(Electron_energy, dtype=float)
@@ -154,6 +154,15 @@ def wofry_results(harmonic_number=1, shift=0.0, do_plot=0):
         print("File written to disk: detuning-map-spread.png")
         plot_show()
 
+        print(">>>>>>>", Y_IMG_WEIGHTED.shape, spread.shape, x.shape)
+        plot(x * 1e3, Y_IMG_WEIGHTED[0, :]          / Y_IMG_WEIGHTED[0, :]         .max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*1, :] / Y_IMG_WEIGHTED[(200//5)*1, :].max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*2, :] / Y_IMG_WEIGHTED[(200//5)*2, :].max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*3, :] / Y_IMG_WEIGHTED[(200//5)*3, :].max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*4, :] / Y_IMG_WEIGHTED[(200//5)*4, :].max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*5, :] / Y_IMG_WEIGHTED[(200//5)*5, :].max(),
+             legend=[r'$\delta_\mathcal{E}$=0.000',r'$\delta_\mathcal{E}$=0.001',r'$\delta_\mathcal{E}$=0.002',r'$\delta_\mathcal{E}$=0.003',r'$\delta_\mathcal{E}$=0.004',r'$\delta_\mathcal{E}$=0.005'])
+
     for i in range(npoints): # scan in spread values
         Qa1 = numpy.zeros_like(spread)
 
@@ -163,6 +172,118 @@ def wofry_results(harmonic_number=1, shift=0.0, do_plot=0):
     return spread.copy(), (FWHM / FWHM[1]).copy(), (SD / SD[1]).copy(), Qa1.copy()
 
 
+
+def wofry_results_backpropagated(harmonic_number=1, shift=0.0, do_plot=0):
+
+    #
+    # Wofry results
+    #
+    Electron_energy = numpy.linspace(5.9, 6.1, 201)
+    if shift == 0.0:
+        filename = "enerSpreadScanWofry1D/OLD/wfr1D_elec_energy_scan_backpropagated_n%d.h5" % harmonic_number
+    else:
+        filename = "enerSpreadScanWofry1D/OLD/wfr1D_elec_energy_scan_backpropagated_n%d_shift%d.h5" % (harmonic_number, shift)
+
+    Y = numpy.zeros_like(Electron_energy, dtype=float)
+    SD = numpy.zeros_like(Electron_energy, dtype=float)
+
+    for i, electron_energy in enumerate(Electron_energy):
+        subgroupname = "wfr_%5.3f" % electron_energy
+
+        output_wavefront = GenericWavefront1D.load_h5_file(filename, subgroupname)
+        x = output_wavefront.get_abscissas()
+        y = output_wavefront.get_intensity()
+        fwhm, _, _ = get_fwhm(y, x)
+
+        # plot(x, y, title="electron energy = %f GeV FWHM = %f" % (electron_energy, fwhm))
+
+        Y[i] = fwhm
+        SD[i] = get_stdev(x, y)
+
+    if do_plot: plot(Electron_energy, Y,
+         Electron_energy, SD*2.355,
+         xtitle="electron energy [GeV]", ytitle='BACKPROPAGATED WOFRY FWHM % 100m [m]', legend=['FWHM','SD*2.355'], show=1)
+
+
+    #
+    # average
+    #
+    npoints = Electron_energy.size
+    e0 = 6.0
+
+    e_energies = Electron_energy
+    spread = numpy.linspace(0, 0.005, npoints)  # (e_energies - e0) / e0  #
+
+    Weights = numpy.zeros((npoints, npoints)) # spread, e energy
+
+    print(">>>>", e_energies.shape, spread.shape)
+    for i in range(npoints):
+        Weights[i, :] = numpy.exp(-(e_energies - e0)**2 / 2 / (e0 * spread[i])**2 )
+
+    if do_plot: plot_image(Weights, spread, e_energies,
+                           xtitle="sigma spread", ytitle=r"Electron energy $E_e$ [GeV]", title="",
+                           figsize=(9,7), aspect='auto', show=1)
+
+    # store all results in an image
+    for j, electron_energy in enumerate(Electron_energy):
+        subgroupname = "wfr_%5.3f" % electron_energy
+        output_wavefront = GenericWavefront1D.load_h5_file(filename, subgroupname)
+        x = output_wavefront.get_abscissas()
+        y = output_wavefront.get_intensity()  #* Weights[i, j]
+        if j == 0:
+            Y_IMG = numpy.zeros((Electron_energy.size, y.size))
+        Y_IMG[j, :] = y
+
+    if do_plot:
+        plot_image(Y_IMG, Electron_energy, x * 1e3,
+                           ytitle="x [mm] @ backpropagated", xtitle=r"Electron energy $E_e$ [GeV]", title="",
+                           yrange=[-0.05,0.05], figsize=(9,7), aspect='auto', show=0)
+        # plt.savefig("detuning-map-electron.png")
+        # print("File written to disk: detuning-map-electron.png")
+        plot_show()
+
+    FWHM = numpy.zeros(npoints)
+    SD = numpy.zeros(npoints)
+    for i in range(npoints):  # scan in spread values
+        ys = Weights[i, :] # spread, e energy
+        ys = ys / ys.sum()
+        Y_IMG_weighted = Y_IMG * numpy.outer(ys, numpy.ones_like(x))
+
+        yy = Y_IMG_weighted.sum(axis=0)
+        fwhm, _, _ = get_fwhm(yy, x)
+        SD[i] = get_stdev(x, yy)
+        FWHM[i] = fwhm
+        if i == 0:
+            Y_IMG_WEIGHTED = numpy.zeros((spread.size, yy.size))
+        Y_IMG_WEIGHTED[i, :] = yy
+
+    if do_plot:
+        plot_image(Y_IMG_WEIGHTED, spread, x * 1e3,
+                           ytitle="x [mm] @ backpropagated averaged",
+                           xtitle=r"Electron energy spread $\delta_\mathcal{E}$",
+                           title="", #"WEIGHTED shift=%d" % shift,
+                           yrange=[-0.05,0.05], figsize=(9,7), aspect='auto', show=0)
+        # plt.savefig("detuning-map-spread.png")
+        # print("File written to disk: detuning-map-spread.png")
+        plot_show()
+
+        print(">>>>>>>", Y_IMG_WEIGHTED.shape, spread.shape, x.shape)
+        plot(x * 1e3, Y_IMG_WEIGHTED[0, :]          / Y_IMG_WEIGHTED[0, :]         .max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*1, :] / Y_IMG_WEIGHTED[(200//5)*1, :].max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*2, :] / Y_IMG_WEIGHTED[(200//5)*2, :].max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*3, :] / Y_IMG_WEIGHTED[(200//5)*3, :].max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*4, :] / Y_IMG_WEIGHTED[(200//5)*4, :].max(),
+             x * 1e3, Y_IMG_WEIGHTED[(200//5)*5, :] / Y_IMG_WEIGHTED[(200//5)*5, :].max(),
+             legend=[r'$\delta_\mathcal{E}$=0.000',r'$\delta_\mathcal{E}$=0.001',r'$\delta_\mathcal{E}$=0.002',r'$\delta_\mathcal{E}$=0.003',r'$\delta_\mathcal{E}$=0.004',r'$\delta_\mathcal{E}$=0.005'],
+             xrange=[-0.025, 0.025])
+
+    for i in range(npoints): # scan in spread values
+        Qa1 = numpy.zeros_like(spread)
+
+        for i in range(spread.size):
+            Qa1[i] = q_a(norm_energ_spr(spread[i], harmonic_number=harmonic_number, verbose=0))
+
+    return spread.copy(), (FWHM / FWHM[1]).copy(), (SD / SD[1]).copy(), Qa1.copy()
 
 def spectra_results(harmonic_number=1, shift=0.0, do_plot=0):
     datadir = "/scisoft/data/srio/paper-undulator/spectra_results/"
@@ -273,7 +394,7 @@ if __name__ == "__main__":
     matplotlib.rcParams.update({'font.size': 18})
 
     # FIG 4 : WOFRY on resonance results
-    if False:
+    if True:
         Spread1, Fwhm1, Sd1, Qa1 = wofry_results(harmonic_number=1, do_plot=0)
         Spread3, Fwhm3, Sd3, Qa3 = wofry_results(harmonic_number=3, do_plot=0)
         Spread5, Fwhm5, Sd5, Qa5 = wofry_results(harmonic_number=5, do_plot=0)
@@ -301,8 +422,11 @@ if __name__ == "__main__":
         plt.savefig("angular_width_vs_spread.pdf")
         print("File writte to disk: angular_width_vs_spread.pdf")
 
-    # FIG 6 : WOFRY shifted from resonance
+
+
+    # FIG 7 : WOFRY shifted from resonance
     Spread1, Fwhm1, Sd1, Qa1 = wofry_results(harmonic_number=1, do_plot=1)
+    # BPSpread1, BPFwhm1, BPSd1, BPQa1 = wofry_results_backpropagated(harmonic_number=1, do_plot=1)
 
     # WOFRY shifted from resonance
     if False:

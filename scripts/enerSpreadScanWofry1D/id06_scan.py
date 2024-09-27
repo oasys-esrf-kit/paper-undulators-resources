@@ -21,7 +21,7 @@ from srxraylib.plot.gol import plot, plot_image
 plot_from_oe = 1000 # set to a large number to avoid plots
 
 
-def run_beamline(shift=0.0, electron_energy=6.0, harmonic_number=1, do_write=0):
+def run_beamline(shift=0.0, electron_energy=6.0, harmonic_number=1, do_write=0, do_plot=0):
 
     photon_energy = 10000.0 + shift
     ##########  SOURCE ##########
@@ -39,20 +39,21 @@ def run_beamline(shift=0.0, electron_energy=6.0, harmonic_number=1, do_write=0):
         period_length=0.018,
         number_of_periods=111.111,
         distance=100,
-        gapH=0.005 * 2,
-        gapV=0.005 * 2,
+        gapH=0.014,
+        gapV=0.014,
         photon_energy=photon_energy * harmonic_number,
         h_slit_points=3,
-        v_slit_points=250,
+        v_slit_points=550 * 4,
         number_of_trajectory_points=1666,
-        traj_method=0, # 0=TRAJECTORY_METHOD_ANALYTIC, 1=TRAJECTORY_METHOD_ODE
-        rad_method=2, # 0=RADIATION_METHOD_NEAR_FIELD, 1= RADIATION_METHOD_APPROX, 2=RADIATION_METHOD_APPROX_FARFIELD
-        )
+        traj_method=0,  # 0=TRAJECTORY_METHOD_ANALYTIC, 1=TRAJECTORY_METHOD_ODE
+        rad_method=2,  # 0=RADIATION_METHOD_NEAR_FIELD, 1= RADIATION_METHOD_APPROX, 2=RADIATION_METHOD_APPROX_FARFIELD
+    )
+
 
     output_wavefront = light_source.get_wavefront().get_Wavefront1D_from_profile(1, 0.0)
 
 
-    if plot_from_oe <= 0: plot(output_wavefront.get_abscissas(),output_wavefront.get_intensity(),title='SOURCE')
+    if do_plot: plot(output_wavefront.get_abscissas(),output_wavefront.get_intensity(),title='SOURCE')
 
     if do_write:
         if shift == 0.0:
@@ -65,16 +66,61 @@ def run_beamline(shift=0.0, electron_energy=6.0, harmonic_number=1, do_write=0):
                                       intensity=True, phase=False, overwrite=False, verbose=True)
 
 
+    ##########  OPTICAL SYSTEM ##########
 
+    ##########  OPTICAL ELEMENT NUMBER 1 ##########
+
+    input_wavefront = output_wavefront.duplicate()
+    from wofryimpl.beamline.optical_elements.ideal_elements.screen import WOScreen1D
+
+    optical_element = WOScreen1D()
+
+    # drift_before -100 m
+    #
+    # propagating
+    #
+    #
+    propagation_elements = PropagationElements()
+    beamline_element = BeamlineElement(optical_element=optical_element,
+                                       coordinates=ElementCoordinates(p=-100.000000, q=0.000000,
+                                                                      angle_radial=numpy.radians(0.000000),
+                                                                      angle_azimuthal=numpy.radians(0.000000)))
+    propagation_elements.add_beamline_element(beamline_element)
+    propagation_parameters = PropagationParameters(wavefront=input_wavefront, propagation_elements=propagation_elements)
+    # self.set_additional_parameters(propagation_parameters)
+    #
+    propagation_parameters.set_additional_parameters('magnification_x', 0.0075)
+    #
+    propagator = PropagationManager.Instance()
+    try:
+        propagator.add_propagator(FresnelZoom1D())
+    except:
+        pass
+    output_wavefront = propagator.do_propagation(propagation_parameters=propagation_parameters,
+                                                 handler_name='FRESNEL_ZOOM_1D')
+
+    if do_write:
+        if shift == 0.0:
+            filename = "wfr1D_elec_energy_scan_backpropagated_n%d.h5" % harmonic_number
+        else:
+            filename = "wfr1D_elec_energy_scan_backpropagated_n%d_shift%d.h5" % (harmonic_number, shift)
+
+        subgroupname = "wfr_%5.3f" % electron_energy
+        output_wavefront.save_h5_file(filename=filename, subgroupname=subgroupname,
+                                      intensity=True, phase=False, overwrite=False, verbose=True)
+
+
+    if do_plot: plot(output_wavefront.get_abscissas(),output_wavefront.get_intensity(),title='BACKPROPAGATED')
 
 if __name__ == "__main__":
     # delete  wfr1D_elec_energy_scan_farfield.h5
     plot_from_oe = 1000  # set to a large number to avoid plots
-    Electron_energy = numpy.linspace(5.9, 6.1, 201)
-    Shift = numpy.arange(-300, 501, 1)
+    Electron_energy = numpy.linspace(5.9, 6.1, 201) #[6.0*(1-0.005)] #
+    Shift = [0.0] # numpy.arange(-300, 501, 1)
     #print(Electron_energy)
     #print(Shift)
-    for shift in Shift:
-        for electron_energy in Electron_energy:
-            print(">>>> shift: %f electron_energy: **%5.3f**" % (shift, electron_energy))
-            run_beamline(shift=shift, electron_energy=electron_energy, harmonic_number=1, do_write=1)
+    for harmonic_number in [1,3,5]:
+        for shift in Shift:
+            for electron_energy in Electron_energy:
+                print(">>>> shift: %f electron_energy: **%5.3f**" % (shift, electron_energy))
+                run_beamline(shift=shift, electron_energy=electron_energy, harmonic_number=harmonic_number, do_write=1, do_plot=0)
