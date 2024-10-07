@@ -13,7 +13,7 @@ from collections import OrderedDict
 from xoppylib.sources.srundplug import tuning_curves_on_slit
 
 
-""" In this script we have a set of function to calculate the data and then use
+""" In this script we have a set of functions to calculate the data and then use
     it to plot the results. In our S4 undulator paper (ver 04-Oct-24) correspond to figures:
 
     - Figure 2 (Gaussian sizes and divergences)
@@ -78,7 +78,7 @@ def get_analytic_gauss_source(syned_json_file, photon_energy, energy_spread,
         given Gauss source dimension: hor_size, ver_size, hor_div, ver_div, for 
         odd harmonics up to the max_harmonic_number, 
         it can save a CSV file with the photon energy in one column and
-        the dimention in another """    
+        the given dimension in another """    
     
     var_dic = {'hor_size': 1, 'ver_size': 2, 'hor_div': 3, 'ver_div': 4}
      
@@ -114,10 +114,10 @@ def run_s4_und_gauss(syned_json_file, photon_energy, energy_spread, dimension='h
     """ By generating a SHADOW4 source, this function calculates the standard 
         deviation of a given dimension, for a set of energies (num points) which
         are equally distributed for each harmonic, also by repeating a num_rep
-        times the source generation can calculates a statistical STD for each value,
-        these results are all odd harmonics up to max_harmonic_number.
-        It can save a CSV file with the 
-        photon energy in one column and the dimention in another """ 
+        times the source generation can calculates a statistical STD,
+        these results are for odd harmonics up to max_harmonic_number.
+        It can save a CSV file with the photon energy in one column and
+        the dimension in another """ 
 
     col_dic = {'hor_size':1, 'ver_size':3, 'hor_div':4, 'ver_div':6}
 
@@ -195,7 +195,7 @@ def plot_gauss_shadow4(analytic_gauss_csv, shadow4_gauss_csv, dimension = 'hor_s
 
     """ This function plots for a given dimension the analityc Gauss results:
      - Results from function: get_analytic_gauss_source
-     - Rsult from ray generated source run_s4_und_gauss (fun run_s4_und_gauss)
+     - Results from ray generated source run_s4_und_gauss (fun run_s4_und_gauss)
            
      dimension options: hor_size, ver_size, hor_div, ver_div    
           """
@@ -241,6 +241,11 @@ def get_flux_xoppy(syned_json_file, Kpoints=3, harms="1, 3, 5, 7, 9",
                   energy_spread=0.001, kmin=0.002, flag_energy_spread=1,
                   emittance=True, nrays=10000, seed=5676561, save_file=True):
     
+    """ This function start by calculating the flux vs photon energies with
+    XOPPY:tuning_curves_on_slit, then it calculates the SHADOW4:get_flux_central_cone
+    for those photon energies, it can save a CSV file  
+    """
+    
     syned_obj = load_from_json_file(syned_json_file)
     e_beam = syned_obj.get_electron_beam()
     undulator = syned_obj.get_magnetic_structure()
@@ -268,7 +273,7 @@ def get_flux_xoppy(syned_json_file, Kpoints=3, harms="1, 3, 5, 7, 9",
     
     harmonics = harms.split(",")
     
-    K_scan,harmonics,power_array, energy_values_at_flux_peak,flux_values = tuning_curves_on_slit(bl,
+    K_scan, harmonics, power_array, energy_values_at_flux_peak, flux_values = tuning_curves_on_slit(bl,
         Kmin=kmin,
         Kmax=kmax,
         Kpoints=Kpoints,
@@ -317,6 +322,9 @@ def get_flux_xoppy(syned_json_file, Kpoints=3, harms="1, 3, 5, 7, 9",
     return df_flux
 
 def plot_flux(flux_csv, save_fig=True):
+
+    """ Plots the flux to compare XOPPY:tuning_curves_on_slit  with
+     SHADOW4:get_flux_central_cone usign the file created by the above function"""
 
     f_size = 11
 
