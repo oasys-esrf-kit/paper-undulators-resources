@@ -37,7 +37,7 @@ Fig 10 in:
 scripts/fig10_flux_polychomatic/plot_s4_und_paper_fig10_compare_flux.py
 
 Fig 11 in:
-TODO: Juan
+scripts/fi11_polychromatic_vs_step-by-step/plot_s4_und_paper_fig11_wide_energy_range.py
 
 Fig 12 in
 scripts/fig12_raytracing_sizes_nospread.py
