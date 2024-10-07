@@ -31,10 +31,10 @@ Fig 8 in:
 scripts/fig8_raytracing_divergences_nospread.py
 
 Fig 9 in:
-TODO: Juan
+scripts/plot_s4_und_paper_fig9_energy_shifts.py
 
 Fig 10 in:
-TODO: Juan
+scripts/fig10_flux_polychomatic/plot_s4_und_paper_fig10_compare_flux.py
 
 Fig 11 in:
 TODO: Juan
