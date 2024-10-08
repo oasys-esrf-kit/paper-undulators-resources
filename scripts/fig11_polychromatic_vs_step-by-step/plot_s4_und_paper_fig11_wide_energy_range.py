@@ -277,7 +277,7 @@ def run_source_by_energy_step(syned_json_file, res_photon_energy=10e3, energy_mi
         
         print(f's4_e_step_full_harmonic_profiles_{code_undul_phot}.h5 has been save to disk')
 
-def compare_results(h5_file_s4_full, h5_file_s4_steps, f_size=12, line_width=4):
+def compare_results(h5_file_s4_full, h5_file_s4_steps, f_size=12, line_width=4, figsize=(12, 8)):
 
     """ Here, by reading each created HDF5 and then we sum rows (for hortizontal)
     and columns (for vertical) for each spatial and divergence, and then it
@@ -309,7 +309,7 @@ def compare_results(h5_file_s4_full, h5_file_s4_steps, f_size=12, line_width=4):
     h5_steps.close()    
 
     ### HORIZONTAL SIZE ###
-
+    plt.subplots(figsize=figsize)
     #sum all the rows and normalize to the peak
     full_spatial_horizontal = numpy.sum(full_spatial_data, axis=0) / max(numpy.sum(full_spatial_data, axis=0))
     steps_spatial_horizontal = numpy.sum(steps_spatial_data, axis=0) / max(numpy.sum(steps_spatial_data, axis=0))
@@ -330,7 +330,7 @@ def compare_results(h5_file_s4_full, h5_file_s4_steps, f_size=12, line_width=4):
     plt.show()
 
     ### VERTICAL SIZE ###
-
+    plt.subplots(figsize=figsize)
     #sum all the columns and normalize to the peak
     full_spatial_vertical = numpy.sum(full_spatial_data, axis=1) / max(numpy.sum(full_spatial_data, axis=1))
     steps_spatial_vertical = numpy.sum(steps_spatial_data, axis=1) / max(numpy.sum(steps_spatial_data, axis=1))
@@ -351,7 +351,7 @@ def compare_results(h5_file_s4_full, h5_file_s4_steps, f_size=12, line_width=4):
     plt.show()
    
     ##### HORIZONTAL DIVERGENCE #####
-
+    plt.subplots(figsize=figsize)
     #sum all the rows and normalize to the peak
     full_div_hor = numpy.sum(full_div_data, axis=0) / max(numpy.sum(full_div_data, axis=0))
     steps_div_hor = numpy.sum(steps_div_data, axis=0) / max(numpy.sum(steps_div_data, axis=0))
@@ -372,7 +372,7 @@ def compare_results(h5_file_s4_full, h5_file_s4_steps, f_size=12, line_width=4):
     plt.show()
 
     ### VERTICAL DIVERGENCE ###
-
+    plt.subplots(figsize=figsize)
     #sum all the columns and normalize to the peak
     full_div_ver = numpy.sum(full_div_data, axis=1) / max(numpy.sum(full_div_data, axis=1))
     steps_div_ver = numpy.sum(steps_div_data, axis=1) / max(numpy.sum(steps_div_data, axis=1))
@@ -392,8 +392,7 @@ def compare_results(h5_file_s4_full, h5_file_s4_steps, f_size=12, line_width=4):
     plt.legend(fontsize = f_size - 6)
     plt.show()    
     
-if __name__=='__main__': 
-    #pass
+if __name__=='__main__':
     
     code_undul_phot = 'internal'
     
@@ -407,4 +406,5 @@ if __name__=='__main__':
     #          emittance = True, nrays=100000, seed=0, flag_energy_spread=0,
     #          energy_spread=0.001, nbins=201, save_file = True)
 
-    compare_results('s4_full_harmonic_profiles.h5', 's4_e_step_full_harmonic_profiles.h5', f_size=24)
+
+    compare_results('s4_full_harmonic_profiles.h5', 's4_e_step_full_harmonic_profiles.h5', f_size=24, figsize=(12, 8))

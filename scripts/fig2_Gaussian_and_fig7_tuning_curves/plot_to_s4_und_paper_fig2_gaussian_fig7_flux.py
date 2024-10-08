@@ -232,8 +232,8 @@ def plot_gauss_shadow4(analytic_gauss_csv, shadow4_gauss_csv, dimension = 'hor_s
     plt.legend(fontsize = f_size - 6)
 
     if save_fig:
-        plt.savefig(f"Source_Gauss_{dimension}.png", dpi=600)
-        print(f"Figure Source_Gauss_{dimension}.png has been saved to disk")
+        plt.savefig(f"Source_Gauss_{dimension}.pdf") # , dpi=600)
+        print(f"Figure Source_Gauss_{dimension}.pdf has been saved to disk")
           
     plt.show()    
 
@@ -326,10 +326,11 @@ def plot_flux(flux_csv, save_fig=True):
     """ Plots the flux to compare XOPPY:tuning_curves_on_slit  with
      SHADOW4:get_flux_central_cone usign the file created by the above function"""
 
-    f_size = 11
+    f_size = None # 22
 
     df_flux = pd.read_csv(flux_csv, sep=',', comment = '#', engine='python')
 
+    # plt.subplots(figsize=(12, 8))
     for i in range(int(df_flux.shape[1]/3)):
         harmonic = (2*i)+1
         plt.plot(df_flux[f'Photon Energy {harmonic}']*1e-3, df_flux[f'xoppy_flux_{harmonic}'], marker='o', label=f'XOPPY_{harmonic}')
@@ -348,17 +349,22 @@ def plot_flux(flux_csv, save_fig=True):
 
     if save_fig:
 
-        plt.savefig(f"Flux_comparison_xoppy_s4.png", dpi=600)
-        print(f"Flux_comparison_xoppy_s4.png has been saved to disk")
+        plt.savefig(f"Flux_comparison_xoppy_s4.pdf") # , dpi=600)
+        print(f"Flux_comparison_xoppy_s4.pdf has been saved to disk")
 
     plt.show()
 
 
 if __name__=='__main__':
-    #pass
-    #examples of use:    
-   
-    plotting = True
+
+    # global settings
+    import matplotlib
+    matplotlib.rcParams.update({'font.size': 22})
+    plt.subplots(figsize=(12, 8))
+
+    # what to plot
+    plotting = 0 # 0=None, 1=HS, 2=VS, 3=HD, 4=VD for size, div in H,V
+    do_plot_flux = 1 # 0=No, 1=Yes
     calculating = False
 
     if calculating:
@@ -386,20 +392,34 @@ if __name__=='__main__':
     #                                                max_harmonic_number=11, flag_energy_spread=1,
     #                                                emittance=True, nrays=100000, seed=0,
     #                                                save_file=True)
-    
+
+    # for figure 7
+    if do_plot_flux:
+        plot_flux('Flux_comparison_xoppy_s4.csv')
+
     # Figure 2
+    if plotting > 0:
+        matplotlib.rcParams.update({'font.size': 26})
 
-    if plotting:
-        dimension = 'ver_size'
-        var_name = 'Vertical size' #Vertical divergence'
-        units = '$\mu$m'#'$\mu$rad'# 
+        if plotting == 2:
+            dimension = 'ver_size'
+            var_name = 'Vertical size'
+            units = '$\mu$m'
+        elif plotting == 4:
+            dimension = 'ver_div'
+            var_name = 'Vertical divergence'
+            units = '$\mu$rad'#
+        elif plotting == 1:
+            dimension = 'hor_size'
+            var_name = 'Horizontal size'
+            units = '$\mu$m'
+        elif plotting == 3:
+            dimension = 'hor_div'
+            var_name = 'Horizontal divergence'
+            units = '$\mu$rad'
 
-        
         plot_gauss_shadow4(f'Analytic_Gauss_{dimension}_spread_0.001.csv',
                           f'shadow4_Gauss_{dimension}_spread_0.001.csv',
                            dimension = dimension, var_name = var_name,
                            units=units, error_bar=True, save_fig=True, f_size=24) 
 
-    # for figure 7
-        
-    # plot_flux('Flux_comparison_xoppy_s4.csv')        

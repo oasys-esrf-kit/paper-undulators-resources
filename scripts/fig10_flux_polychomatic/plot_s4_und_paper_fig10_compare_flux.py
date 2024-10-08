@@ -17,7 +17,7 @@ import numpy
     """
 
 
-def plot_flux_spectrum(s4_get_flux, s4_histo_flux, font_size= 12):
+def plot_flux_spectrum(s4_get_flux, s4_histo_flux, font_size= 12, filename=""):
     
     """ This function reads the files saved directly from the S4 GUI: Undulator Light Source,
     then, it weights the flux from the histogram to convert it to Ph/s/eV
@@ -45,11 +45,21 @@ def plot_flux_spectrum(s4_get_flux, s4_histo_flux, font_size= 12):
     plt.yticks(fontsize=font_size) 
     plt.legend(fontsize=font_size)
     #plt.title()
+    if filename != "":
+        plt.savefig(filename)
+        print("File %s written to disk." % filename)
     plt.show()   
     
 if __name__=='__main__': 
-    
-    #pass    
 
-    plot_flux_spectrum('s4_spectrum_1st_harm_slit_0.001_poly.csv', 's4_spectrum_1st_harm_slit_0.001_poly_histo.csv', font_size=12)
-    plot_flux_spectrum('s4_spectrum_3rd_harm_slit_0.0005_poly.csv', 's4_spectrum_3rd_harm_slit_0.0005_poly_histo.csv', font_size=12)
+    # global settings
+    import matplotlib
+    matplotlib.rcParams.update({'font.size': 26})
+
+    plt.subplots(figsize=(12, 8))
+    plot_flux_spectrum('s4_spectrum_1st_harm_slit_0.001_poly.csv', 's4_spectrum_1st_harm_slit_0.001_poly_histo.csv',
+                       filename="undulator_flux_first_harm.pdf", font_size=None)
+
+    plt.subplots(figsize=(12, 8))
+    plot_flux_spectrum('s4_spectrum_3rd_harm_slit_0.0005_poly.csv', 's4_spectrum_3rd_harm_slit_0.0005_poly_histo.csv',
+                       filename="undulator_flux_third_harm.pdf", font_size=None)

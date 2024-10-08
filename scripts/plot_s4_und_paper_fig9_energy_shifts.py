@@ -127,19 +127,19 @@ def run_source(syned_json_file, photon_energy=10e3, harmonic=1,
     plt.legend(fontsize=font_size)
     plt.show()
 
-if __name__=='__main__': 
-    #pass  
-
-    #run_pysru_wofry('ESRF_ID06_EBS_CPMU18_1.json', 10000, 1,
-    #               code_undul_phot = 'srw', emittance = True,
-    #               nrays=500000, seed=5676561, flag_energy_spread=0)
-
+if __name__=='__main__':
     code_undul_phot = 'srw'
 
     run_source('ESRF_ID06_EBS_CPMU18_1.json', 50000, 5,
                code_undul_phot = code_undul_phot, emittance = True,
                nrays=500000, seed=5676561, flag_energy_spread=0, font_size=12)
-    
-   # run_pysru_wofry('ESRF_ID06_EBS_CPMU18_1.json', 50000, 5,
-   #            code_undul_phot = code_undul_phot, emittance = True,
-   #            nrays=500000, seed=5676561, flag_energy_spread=1, energy_spread=0.001, font_size=12)
+
+    #pass
+
+    #run_pysru_wofry('ESRF_ID06_EBS_CPMU18_1.json', 10000, 1,
+    #               code_undul_phot = 'srw', emittance = True,
+    #               nrays=500000, seed=5676561, flag_energy_spread=0)
+
+    # run_pysru_wofry('ESRF_ID06_EBS_CPMU18_1.json', 50000, 5,
+    #            code_undul_phot = code_undul_phot, emittance = True,
+    #            nrays=500000, seed=5676561, flag_energy_spread=1, energy_spread=0.001, font_size=12)
