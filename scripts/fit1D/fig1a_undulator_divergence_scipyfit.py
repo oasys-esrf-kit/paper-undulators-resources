@@ -26,7 +26,7 @@ def doublegauss(x, height, center, sigma, distance): #, correction):
 
 if __name__ == "__main__":
     import matplotlib
-    matplotlib.rcParams.update({'font.size': 18})
+    matplotlib.rcParams.update({'font.size': 24})
 
     ngaussians = 1
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     p = plot(x, y,
              x, y1,
              xtitle=r'$\theta_r=\theta\sqrt{L/\lambda}$', ytitle=r'$(sin(\Gamma)/\Gamma)^2$',
-             figsize=(12,8), show=0)
+             figsize=(12,8), legend=['equation (4)','Gaussian fit'], show=0)
     plt.savefig('undulator_divergence.pdf')
     print("File written to disk: undulator_divergence.pdf")
     plt.show()

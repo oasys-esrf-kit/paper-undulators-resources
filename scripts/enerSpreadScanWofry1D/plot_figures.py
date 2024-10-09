@@ -420,7 +420,7 @@ def plot_farfield(figfile=""):
                 'blue', 'blue', 'blue',
                 'red', 'red', 'red',
                 ],
-         title="", yrange=[0,5], figsize=(12,8), show=0)
+         title="", xrange=[-0.0009,0.0051], yrange=[0,8], figsize=(9,6), show=0)
 
     if figfile != "":
         plt.savefig(figfile)
@@ -458,8 +458,8 @@ def plot_backpropagated(figfile=""):
                'blue', 'blue', 'blue',
                'red', 'red', 'red',
                ],
-        xrange=[0, 0.0025],
-        title="", yrange=[0,3], figsize=(12,8), show=0)
+        xrange=[-0.00045, 0.00255],
+        title="", yrange=[0,5], figsize=(9,6), show=0)
 
     if figfile != "":
         plt.savefig(figfile)

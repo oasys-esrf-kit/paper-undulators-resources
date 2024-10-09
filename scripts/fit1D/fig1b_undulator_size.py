@@ -7,8 +7,7 @@ from silx.math.fit.fitmanager import FitManager
 from srxraylib.plot.gol import plot
 
 import matplotlib
-
-matplotlib.rcParams.update({'font.size': 18})
+matplotlib.rcParams.update({'font.size': 24})
 
 a = numpy.loadtxt("undulator_size.dat")
 # x = a[:, 0].copy()
@@ -60,7 +59,8 @@ print("Area fit: ", y1.sum() * (x[1] - x[0]))
 # plot and save file
 
 p = plot(x, y, x, y1,
-         xtitle=r'$2 \pi r / \sqrt{ 2 \lambda L }$', ytitle=r'Normalized intensity', figsize=(12,8), show=0)
+         xtitle=r'$2 \pi r / \sqrt{ 2 \lambda L }$', ytitle=r'Normalized intensity', figsize=(12,8),
+         legend=['equation (5)','Gaussian fit'], show=0)
 
 import matplotlib.pylab as plt
 plt.savefig('undulator_size.pdf')
