@@ -33,7 +33,7 @@ scripts/fig8_raytracing_divergences_nospread.py
 [Fig. 9](https://github.com/oasys-esrf-kit/paper-undulators-resources/tree/main/scripts) in:
 scripts/plot_s4_und_paper_fig9_energy_shifts.py
 
-[Fig. 10](https://github.com/oasys-esrf-kit/paper-undulators-resources/tree/main/scripts) in:
+[Fig. 10](https://github.com/oasys-esrf-kit/paper-undulators-resources/tree/main/scripts/fig10_flux_polychomatic) in:
 scripts/fig10_flux_polychomatic/plot_s4_und_paper_fig10_compare_flux.py
 
 [Fig. 11](https://github.com/oasys-esrf-kit/paper-undulators-resources/tree/main/scripts/fig11_polychromatic_vs_step-by-step) in:
