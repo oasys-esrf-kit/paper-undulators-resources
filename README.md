@@ -6,7 +6,7 @@ scripts/fit1D/fig1a_undulator_divergence_scipyfit.py
 scripts/fit1D/fig1a_undulator_size.py
 
 Fig 2 in: 
-scripts/fig2_Gausian_and_fig7_tuning_curves/plot_to_s4_und_paper_fig2_gaussian_fig7_flux.py
+scripts/fig2_Gaussian_and_fig7_tuning_curves/plot_to_s4_und_paper_fig2_gaussian_fig7_flux.py
 
 Fig 3 in: 
 scripts/enerSpreadScanWofry1D/plot_figures.py
