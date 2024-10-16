@@ -1,7 +1,7 @@
 # paper-undulators-resources
 Scripts and codes for ray tracing undulators sources
 
-Fig 1 in:
+[Fig 1](https://github.com/oasys-esrf-kit/paper-undulators-resources/tree/main/scripts/fit1D) in:
 scripts/fit1D/fig1a_undulator_divergence_scipyfit.py
 scripts/fit1D/fig1a_undulator_size.py
 
