@@ -70,7 +70,7 @@ def run_redshifted_pysru():
         srw_range=0.2,  # for SRW backpropagation, the range factor
         srw_resolution=100.0,  # for SRW backpropagation, the resolution factor
         srw_semianalytical=1,  # for SRW backpropagation, use semianalytical treatement of phase
-        magnification=0.01,  # for internal/wofry backpropagation, the magnification factor
+        magnification=0.05,  # for internal/wofry backpropagation, the magnification factor
         flag_backprop_recalculate_source=1,
         # for internal or pysru/wofry backpropagation: source reused (0) or recalculated (1)
         flag_backprop_weight=0,  # for internal or pysru/wofry backpropagation: apply Gaussian weight to amplitudes
@@ -105,7 +105,7 @@ def run_redshifted_srw():
         emin=9910.0,  # Photon energy scan from energy (in eV)
         emax=9910.0,  # Photon energy scan to energy (in eV)
         ng_e=1,  # Photon energy scan number of points
-        maxangle=5e-05,  # Maximum radiation semiaperture in RADIANS
+        maxangle=0.00015,  # Maximum radiation semiaperture in RADIANS
         ng_t=100,  # Number of points in angle theta
         ng_p=11,  # Number of points in angle phi
         ng_j=20,  # Number of points in electron trajectory (per period) for internal calculation only
@@ -246,7 +246,7 @@ def run_resonance_srw():
         emin=10000.0,  # Photon energy scan from energy (in eV)
         emax=10000.0,  # Photon energy scan to energy (in eV)
         ng_e=1,  # Photon energy scan number of points
-        maxangle=5e-05,  # Maximum radiation semiaperture in RADIANS
+        maxangle=0.00015,  # Maximum radiation semiaperture in RADIANS
         ng_t=100,  # Number of points in angle theta
         ng_p=11,  # Number of points in angle phi
         ng_j=20,  # Number of points in electron trajectory (per period) for internal calculation only
@@ -387,7 +387,7 @@ def run_blueshifted_srw():
         emin=10036.0,  # Photon energy scan from energy (in eV)
         emax=10036.0,  # Photon energy scan to energy (in eV)
         ng_e=1,  # Photon energy scan number of points
-        maxangle=5e-05,  # Maximum radiation semiaperture in RADIANS
+        maxangle=0.00015,  # Maximum radiation semiaperture in RADIANS
         ng_t=100,  # Number of points in angle theta
         ng_p=11,  # Number of points in angle phi
         ng_j=20,  # Number of points in electron trajectory (per period) for internal calculation only
@@ -431,7 +431,7 @@ if __name__ == "__main__":
     hrange = [-50e-6, 50e-6]
     factor_nrays = 1.0
 
-    flag_emittance = 0
+    flag_emittance = 1
     figure_number = 13 - flag_emittance
 
 
