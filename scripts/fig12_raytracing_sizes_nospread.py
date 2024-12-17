@@ -59,7 +59,7 @@ def run_redshifted_pysru():
         emin=9910.0,  # Photon energy scan from energy (in eV)
         emax=9910.0,  # Photon energy scan to energy (in eV)
         ng_e=1,  # Photon energy scan number of points
-        maxangle=1.63e-05,  # Maximum radiation semiaperture in RADIANS
+        maxangle=5e-05,  # Maximum radiation semiaperture in RADIANS
         ng_t=100,  # Number of points in angle theta
         ng_p=11,  # Number of points in angle phi
         ng_j=20,  # Number of points in electron trajectory (per period) for internal calculation only
@@ -340,7 +340,7 @@ def run_blueshifted_pysru():
         emin=10036.0,  # Photon energy scan from energy (in eV)
         emax=10036.0,  # Photon energy scan to energy (in eV)
         ng_e=1,  # Photon energy scan number of points
-        maxangle=2.5e-05,  # Maximum radiation semiaperture in RADIANS
+        maxangle=5e-05,  # Maximum radiation semiaperture in RADIANS
         ng_t=100,  # Number of points in angle theta
         ng_p=11,  # Number of points in angle phi
         ng_j=20,  # Number of points in electron trajectory (per period) for internal calculation only
@@ -478,27 +478,27 @@ if __name__ == "__main__":
     plt.savefig("fig%dc.png" % figure_number)
     #
     #
-    plot(1e6 * tkt_red_0_v["bin_path"], tkt_red_0_v["histogram_path"] + 50*factor_nrays,
-         1e6 * tkt_red_1_v["bin_path"], tkt_red_1_v["histogram_path"] + 200*factor_nrays,
-         1e6 * tkt_red_2_v["bin_path"], tkt_red_2_v["histogram_path"] + 350*factor_nrays,
+    plot(1e6 * tkt_red_0_v["bin_path"], tkt_red_0_v["histogram_path"], # + 50*factor_nrays,
+         1e6 * tkt_red_1_v["bin_path"], tkt_red_1_v["histogram_path"], # + 200*factor_nrays,
+         1e6 * tkt_red_2_v["bin_path"], tkt_red_2_v["histogram_path"], # + 350*factor_nrays,
          legend=[r"internal",r"pySRU",r"SRW"],
          # yrange=[0,850*factor_nrays],
          show=0, #linestyle=['solid','dotted','dashed'],
          figsize=(10,8), xtitle=r"Z [$\mu$m]", ytitle=r"Intensity [arbitrary units]", ) #color=['r','r','r'])
     plt.savefig("fig%dd.pdf" % figure_number)
     #
-    plot(1e6 * tkt_zero_0_v["bin_path"], tkt_zero_0_v["histogram_path"] + 50*factor_nrays,
-         1e6 * tkt_zero_1_v["bin_path"], tkt_zero_1_v["histogram_path"] + 200*factor_nrays,
-         1e6 * tkt_zero_2_v["bin_path"], tkt_zero_2_v["histogram_path"] + 350*factor_nrays,
+    plot(1e6 * tkt_zero_0_v["bin_path"], tkt_zero_0_v["histogram_path"], # + 50*factor_nrays,
+         1e6 * tkt_zero_1_v["bin_path"], tkt_zero_1_v["histogram_path"], # + 200*factor_nrays,
+         1e6 * tkt_zero_2_v["bin_path"], tkt_zero_2_v["histogram_path"], # + 350*factor_nrays,
          legend=[r"internal",r"pySRU",r"SRW"],
          # yrange=[0,1250*factor_nrays],
          show=0, #linestyle=['solid','dotted','dashed'],
          figsize=(10,8), xtitle=r"Z [$\mu$m]", ytitle=r"Intensity [arbitrary units]", ) # color=['k','k','k'])
     plt.savefig("fig%de.pdf" % figure_number)
     #
-    plot(1e6 * tkt_blue_0_v["bin_path"], tkt_blue_0_v["histogram_path"] + 50*factor_nrays,
-         1e6 * tkt_blue_1_v["bin_path"], tkt_blue_1_v["histogram_path"] + 200*factor_nrays,
-         1e6 * tkt_blue_2_v["bin_path"], tkt_blue_2_v["histogram_path"] + 350*factor_nrays,
+    plot(1e6 * tkt_blue_0_v["bin_path"], tkt_blue_0_v["histogram_path"], # + 50*factor_nrays,
+         1e6 * tkt_blue_1_v["bin_path"], tkt_blue_1_v["histogram_path"], # + 200*factor_nrays,
+         1e6 * tkt_blue_2_v["bin_path"], tkt_blue_2_v["histogram_path"], # + 350*factor_nrays,
          legend=[r"internal",r"pySRU",r"SRW"],
          # yrange=[0,1450*factor_nrays],
          show=0, #linestyle=['solid','dotted','dashed'],
