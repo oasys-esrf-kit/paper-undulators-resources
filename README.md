@@ -1,5 +1,9 @@
 # paper-undulators-resources
-Scripts and codes for ray tracing undulators sources
+
+Scripts and code for ray tracing undulators sources used in the paper "Modelling undulators in ray tracing simulations" by 
+M. Sanchez del Rio and J. Reyes-Herrera (to be published in Journal of Synchrotron Radiation, preprint at: 
+https://doi.org/10.48550/arXiv.2410.13672 )
+
 
 [Fig. 1](https://github.com/oasys-esrf-kit/paper-undulators-resources/tree/main/scripts/fit1D) in:
 scripts/fit1D/fig1a_undulator_divergence_scipyfit.py
