@@ -16,7 +16,6 @@ scripts/enerPhotonScanWofry1D/plot_figures_farfield.py
 scripts/enerPhotonScanWofry1D/plot_figures_backpropagated.py
 
 [Fig. 5](https://github.com/oasys-esrf-kit/paper-undulators-resources/tree/main/scripts) in:
-TODO: review
 scripts/fig5_fig6a_off_resonance_farfield_compare.py
 scripts/fig4_fig6bc_ener_spread_scan_farfield_compare.py
 
